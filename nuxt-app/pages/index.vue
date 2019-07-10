@@ -3,35 +3,16 @@
     <section class="intro">
       <h1>The latest Tech News!</h1>
     </section>
-    <section class="featured-posts">
-      <post-preview
-        id="1"
-        title="Post #1"
-        previewText="Some default interesting text"
-        thumbnail="https://etimg.etb2bimg.com/photo/67936954.cms"
-      />
-      <post-preview
-        id="2"
-        title="Post #2"
-        previewText="Some interesting text for second post"
-        thumbnail="https://www.livingroomconversations.org/wp-content/uploads/2018/09/digital-ecosystem_Tavola-disegno-1.jpg"
-      />
-      <post-preview
-        id="3"
-        title="Post #3"
-        previewText="Some interesting text for third post"
-        thumbnail="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJweQugkJwb6RR8vpuWs_8SMdISooxbAEUj0Y1dk4W0ESf6gjK"
-      />
-    </section>
+    <post-list />
   </div>
 </template>
 
 <script>
-import PostPreview from "@/components/Posts/PostPreview.vue";
+import PostList from "@/components/Posts/PostList.vue";
 
 export default {
   components: {
-    PostPreview
+    PostList
   }
 };
 </script>
@@ -66,14 +47,5 @@ export default {
   .intro h1 {
     font-size: 2rem;
   }
-}
-
-.featured-posts {
-  display: flex;
-  padding: 20px;
-  box-sizing: border-box;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
 }
 </style>
