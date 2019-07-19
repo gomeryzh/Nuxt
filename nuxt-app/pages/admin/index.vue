@@ -5,12 +5,13 @@
     </section>
     <section class="existing-posts">
       <h1>Existing Posts</h1>
-      <post-list :isAdmin="true" :posts="loadedData" />
+      <post-list :isAdmin="true" :posts="loadedPosts" />
     </section>
   </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import PostList from "@/components/Posts/PostList";
 import AppButton from "@/components/UI/AppButton";
 
@@ -22,31 +23,8 @@ export default {
     AppButton
   },
 
-  data() {
-    return {
-      loadedData: [
-        {
-          id: "1",
-          title: "Post #1",
-          previewText: "Some default interesting text",
-          thumbnail: "https://etimg.etb2bimg.com/photo/67936954.cms"
-        },
-        {
-          id: "2",
-          title: "Post #2",
-          previewText: "Some interesting text for second post",
-          thumbnail:
-            "https://www.livingroomconversations.org/wp-content/uploads/2018/09/digital-ecosystem_Tavola-disegno-1.jpg"
-        },
-        {
-          id: "3",
-          title: "Post #3",
-          previewText: "Some default third text",
-          thumbnail:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJweQugkJwb6RR8vpuWs_8SMdISooxbAEUj0Y1dk4W0ESf6gjK"
-        }
-      ]
-    };
+  computed: {
+    ...mapGetters(["loadedPosts"])
   }
 };
 </script>

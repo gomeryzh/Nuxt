@@ -1,8 +1,5 @@
 <template>
   <div class="home-page">
-    <section class="intro">
-      <h1>The latest Tech News!</h1>
-    </section>
     <post-list :posts="loadedPosts" />
   </div>
 </template>

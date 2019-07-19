@@ -25,7 +25,8 @@ export default {
   /*
    ** Customize the progress-bar color
    */
-  loading: { color: '#fff' },
+  loading: { color: '#fff', height: '4px', duration: 5000 },
+  loadingIndicator: { color: 'red', name: 'circle' },
   /*
    ** Global CSS
    */
@@ -54,5 +55,10 @@ export default {
      ** You can extend webpack config here
      */
     extend(config, ctx) {},
+  },
+
+  env: {
+    baseUrl:
+      process.env.BASE_URL || 'https://nuxt-blog-13-07-2019.firebaseio.com',
   },
 };

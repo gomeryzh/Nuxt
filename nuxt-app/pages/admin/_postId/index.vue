@@ -1,12 +1,14 @@
 <template>
   <div class="admin-post-page">
     <section class="update-form">
-      <admin-post-form :post="loadedPost" />
+      <admin-post-form :post="loadedPost" @submit="onSubmit" />
     </section>
   </div>
 </template>
 
 <script>
+import { mapActions } from "vuex";
+// import axios from "axios";
 import AdminPostForm from "@/components/Admin/AdminPostForm";
 
 export default {
@@ -16,16 +18,47 @@ export default {
     AdminPostForm
   },
 
-  data() {
-    return {
-      loadedPost: {
-        author: "Volodymyr Omelianiuk",
-        title: "Some default title",
-        thumbnailLink:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlPHCT_8x2OyneKPzSjjkpqqXpueI50AcbFJ3BK0co5oBLrCjSPQ",
-        content: "tech content lorem"
-      }
-    };
+  // data() {
+  //   return {
+  //     loadedPost: {}
+  //   };
+  // },
+
+  // asyncData(context) {
+  //   axios
+  //     .get(
+  //       `https://nuxt-blog-13-07-2019.firebaseio.com/posts/${
+  //         context.params.postId
+  //       }.json`
+  //     )
+  //     .then(res => {
+  //       console.log(res.data);
+  //       return {
+  //         loadedPost: res.data
+  //       };
+  //     })
+  //     .catch(e => context.error(e));
+  // },
+
+  computed: {
+    loadedPost() {
+      return this.$store.getters.loadedPostById(this.$route.params.postId);
+    }
+  },
+
+  methods: {
+    ...mapActions(["editPost"]),
+
+    onSubmit(editedPost) {
+      const updatedPost = {
+        ...editedPost,
+        id: this.$route.params.postId
+      };
+
+      this.editPost(updatedPost).then(() => {
+        this.$router.push("/admin");
+      });
+    }
   }
 };
 </script>
