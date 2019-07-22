@@ -12,16 +12,9 @@
 
 <script>
 import { mapGetters } from "vuex";
-import PostList from "@/components/Posts/PostList";
-import AppButton from "@/components/UI/AppButton";
 
 export default {
   layout: "admin",
-
-  components: {
-    PostList,
-    AppButton
-  },
 
   computed: {
     ...mapGetters(["loadedPosts"])
