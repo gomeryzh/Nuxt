@@ -34,7 +34,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['~plugins/core-components.js'],
+  plugins: ['~plugins/core-components.js', '~plugins/date-filter.js'],
   /*
    ** Nuxt.js modules
    */
@@ -46,7 +46,11 @@ export default {
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
-  axios: {},
+  axios: {
+    baseURL:
+      process.env.BASE_URL || 'https://nuxt-blog-13-07-2019.firebaseio.com',
+    credentials: false,
+  },
   /*
    ** Build configuration
    */

@@ -8,7 +8,6 @@
 
 <script>
 import { mapActions } from "vuex";
-// import axios from "axios";
 import AdminPostForm from "@/components/Admin/AdminPostForm";
 
 export default {
@@ -25,16 +24,12 @@ export default {
   // },
 
   // asyncData(context) {
-  //   axios
-  //     .get(
-  //       `https://nuxt-blog-13-07-2019.firebaseio.com/posts/${
-  //         context.params.postId
-  //       }.json`
-  //     )
+  //   context.app.$axios
+  //     .get(`/posts/${context.params.postId}.json`)
   //     .then(res => {
   //       console.log(res.data);
   //       return {
-  //         loadedPost: res.data
+  //         loadedPost: { ...res.data, id: context.params.postId }
   //       };
   //     })
   //     .catch(e => context.error(e));

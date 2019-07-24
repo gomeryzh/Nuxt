@@ -4,7 +4,7 @@
       <h1 class="post-title">{{loadedPost.title}}</h1>
       <h1 class="post-title">{{loadedPost.test}}</h1>
       <div class="post-details">
-        <div class="post-detail">Last updated at: {{loadedPost.updatedDate}}</div>
+        <div class="post-detail">Last updated at: {{loadedPost.updatedDate | date}}</div>
         <div class="post-detail">Written by: {{loadedPost.author}}</div>
       </div>
       <p class="post-content">{{loadedPost.previewText}}</p>
@@ -25,21 +25,14 @@ import axios from "axios";
 
 export default {
   asyncData(context) {
-    axios
-      .get(`${process.env.baseUrl}/posts/${context.params.id}.json`)
+    return context.app.$axios
+      .get(`/posts/${context.params.id}.json`)
       .then(res => {
-        console.log(res.data);
         return {
           loadedPost: res.data
         };
       })
       .catch(e => context.error(e));
-  },
-
-  computed: {
-    loadedPost() {
-      return this.$store.getters.loadedPostById(this.$route.params.id);
-    }
   }
 };
 </script>
