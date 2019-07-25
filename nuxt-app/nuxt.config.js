@@ -64,6 +64,7 @@ export default {
   env: {
     baseUrl:
       process.env.BASE_URL || 'https://nuxt-blog-13-07-2019.firebaseio.com',
+    fbAPIKey: 'AIzaSyDvim6CDZPr8VPj4C5pnd3G0bYEIb7PJsk',
   },
 
   transition: {
