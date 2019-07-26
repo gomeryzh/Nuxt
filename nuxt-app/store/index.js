@@ -1,10 +1,11 @@
 import Vuex from 'vuex';
+import Cookie from 'js-cookie';
 
 const createStore = () =>
   new Vuex.Store({
     state: {
       loadedPosts: [],
-      userAuthToken: null,
+      token: null,
     },
 
     actions: {
@@ -34,12 +35,12 @@ const createStore = () =>
         return this.$axios
           .$post(
             `https://nuxt-blog-13-07-2019.firebaseio.com/posts.json?auth=${
-              state.userAuthToken
+              state.token
             }`,
             createdPost,
           )
           .then(res => {
-            commit('addPost', { ...createdPost, id: res.data.name });
+            commit('addPost', { ...createdPost, id: res.name });
           })
           .catch(e => console.log(e));
       },
@@ -49,7 +50,7 @@ const createStore = () =>
           .$put(
             `https://nuxt-blog-13-07-2019.firebaseio.com/posts/${
               updatedPost.id
-            }.json?auth=${state.userAuthToken}`,
+            }.json?auth=${state.token}`,
             updatedPost,
           )
           .then(data => {
@@ -77,28 +78,55 @@ const createStore = () =>
             commit('setToken', res.idToken);
             localStorage.setItem('token', res.idToken);
             localStorage.setItem(
-              'tokenExpiration',
-              new Date().getTime() + res.idToken * 1000,
+              'expirationDate',
+              new Date().getTime() + Number.parseInt(res.expiresIn) * 1000,
             );
-            dispatch('setLogoutTimer', res.expiresIn * 1000);
+            Cookie.set('token', res.idToken);
+            Cookie.set(
+              'expirationDate',
+              new Date().getTime() + Number.parseInt(res.expiresIn) * 1000,
+            );
           })
           .catch(e => console.log(e));
       },
 
-      authInit({ commit, dispatch }) {
-        const token = localStorage.getItem('token');
-        const tokenExpirationDate = localStorage.getItem('tokenExpiration');
+      authInit({ commit, dispatch }, req) {
+        let token, expirationDate;
 
-        if (new Date().getTime() > +tokenExpirationDate || !token) return;
+        if (req) {
+          if (!req.headers.cookie) return;
 
-        dispatch('setLogoutTimer', +tokenExpirationDate - new Date().getTime());
+          const tokenCookie = req.headers.cookie
+            .split(';')
+            .find(c => c.trim().startsWith('userToken='));
+
+          if (!tokenCookie) return;
+
+          token = tokenCookie.split('=')[1];
+          expirationDate = req.headers.cookie
+            .split(';')
+            .find(c => c.trim().startsWith('expirationDate='))
+            .split('=')[1];
+        } else {
+          token = localStorage.getItem('token');
+          expirationDate = localStorage.getItem('expirationDate');
+        }
+        if (new Date().getTime() > +expirationDate || !token) {
+          console.log('no token or invalid token');
+          dispatch('logout');
+          return;
+        }
         commit('setToken', token);
       },
 
-      setLogoutTimer({ commit }, duration) {
-        setTimeout(() => {
-          commit('clearToken');
-        }, duration);
+      logout({ commit }) {
+        commit('clearToken');
+        Cookie.remove('token');
+        Cookie.remove('expirationDate');
+        if (process.client) {
+          localStorage.removeItem('token');
+          localStorage.removeItem('expirationDate');
+        }
       },
     },
 
@@ -120,11 +148,11 @@ const createStore = () =>
       },
 
       setToken(state, token) {
-        state.userAuthToken = token;
+        state.token = token;
       },
 
       clearToken(state) {
-        state.userAuthToken = null;
+        state.token = null;
       },
     },
 
@@ -138,7 +166,7 @@ const createStore = () =>
       },
 
       isAuthenticated: state => {
-        return state.userAuthToken != null;
+        return state.token != null;
       },
     },
   });
