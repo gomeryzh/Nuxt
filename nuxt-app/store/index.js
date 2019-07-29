@@ -86,6 +86,9 @@ const createStore = () =>
               'expirationDate',
               new Date().getTime() + Number.parseInt(res.expiresIn) * 1000,
             );
+            return this.$axios.$post('http://localhost:3000/api/track-data', {
+              data: 'Authenticated!',
+            });
           })
           .catch(e => console.log(e));
       },
@@ -107,7 +110,7 @@ const createStore = () =>
             .split(';')
             .find(c => c.trim().startsWith('expirationDate='))
             .split('=')[1];
-        } else {
+        } else if (process.client) {
           token = localStorage.getItem('token');
           expirationDate = localStorage.getItem('expirationDate');
         }
